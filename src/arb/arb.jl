@@ -897,7 +897,7 @@ function unique_integer(x::arb)
   return (unique != 0, z)
 end
 
-function convert(::Type{Nemo.fmpz}, a::Nemo.arb)
+function (::FlintIntegerRing)(a::arb)
    if !Nemo.isint(a)
       error("Argument must be an integer.")
    end
