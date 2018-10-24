@@ -149,7 +149,7 @@ else
    catch
       run(`./configure --with-yasm=$wdir/yasm-$YASM_VERSION/yasm --prefix=$vdir M4=$vdir/bin/m4 --enable-gmpcompat --disable-static --enable-shared`)
    end
-   run(`make -j4`)
+   run(`make -j$(Sys.CPU_CORES)`)
    run(`make install`)
    cd(wdir)
    run(`rm -rf bin`)
@@ -186,7 +186,7 @@ else
    cd("$wdir/mpfr-$MPFR_VERSION")
    withenv("LD_LIBRARY_PATH"=>"$vdir/lib", "LDFLAGS"=>LDFLAGS) do
       run(`./configure --prefix=$vdir --with-gmp=$vdir --disable-static --enable-shared`) 
-      run(`make -j4`)
+      run(`make -j$(Sys.CPU_CORES)`)
       run(`make install`)
    end
    cd(wdir)
@@ -234,7 +234,7 @@ else
    cd(joinpath("$wdir", "flint2"))
    withenv("LD_LIBRARY_PATH"=>"$vdir/lib", "LDFLAGS"=>LDFLAGS) do
       run(`./configure --prefix=$vdir --disable-static --enable-shared --with-mpir=$vdir --with-mpfr=$vdir`) 
-      run(`make -j4`)
+      run(`make -j$(Sys.CPU_CORES)`)
       run(`make install`)
    end
    println("DONE")
@@ -301,7 +301,7 @@ else
    cd(joinpath("$wdir", "arb"))
    withenv("LD_LIBRARY_PATH"=>"$vdir/lib", "LDFLAGS"=>LDFLAGS) do
       run(`./configure --prefix=$vdir --disable-static --enable-shared --with-mpir=$vdir --with-mpfr=$vdir --with-flint=$vdir`)
-      run(`make -j4`)
+      run(`make -j$(Sys.CPU_CORES)`)
       run(`make install`)
    end
    println("DONE")
@@ -320,7 +320,7 @@ else
    cd(joinpath("$wdir", "antic"))
    withenv("LD_LIBRARY_PATH"=>"$vdir/lib", "LDFLAGS"=>LDFLAGS) do
       run(`./configure --prefix=$vdir --disable-static --enable-shared --with-mpir=$vdir --with-mpfr=$vdir --with-flint=$vdir`)
-      run(`make -j4`)
+      run(`make -j$(Sys.CPU_CORES)`)
       run(`make install`)
    end
    println("DONE")
