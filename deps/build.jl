@@ -11,6 +11,9 @@ const prefixpath = joinpath(@__DIR__, "usr")
 
 const wdir = joinpath(@__DIR__)
 
+cores = Sys.CPU_THREADS
+println("Detected $cores CPU threads.")
+
 if !issource_build
   # Dependencies that must be installed before this package can be built
   dependencies = [
@@ -91,7 +94,7 @@ else
       run(`rm $M4_FILE`)
       cd(joinpath("$wdir", "m4-$M4_VERSION"))
       run(`./configure --prefix=$prefixpath`)
-      run(`make`)
+      run(`make -j$cores`)
       run(`make install`)
       println("DONE")
    end
@@ -108,7 +111,7 @@ else
      run(`rm $YASM_FILE`)
      cd(joinpath("$wdir","yasm-$YASM_VERSION"))
      run(`./configure`)
-     run(`make`)
+     run(`make -j$cores`)
      println("DONE")
   end
 
@@ -136,7 +139,7 @@ else
   catch
      run(`./configure --with-yasm=$wdir/yasm-$YASM_VERSION/yasm --prefix=$prefixpath M4=$prefixpath/bin/m4 --enable-gmpcompat --disable-static --enable-shared`)
   end
-  run(`make -j4`)
+  run(`make -j$cores`)
   run(`make install`)
   cd(wdir)
   run(`rm -rf bin`)
@@ -163,7 +166,7 @@ else
   cd("$wdir/mpfr-$MPFR_VERSION")
   withenv("LD_LIBRARY_PATH"=>"$prefixpath/lib", "LDFLAGS"=>LDFLAGS) do
     run(`./configure --prefix=$prefixpath --with-gmp=$prefixpath --disable-static --enable-shared`)
-    run(`make -j4`)
+    run(`make -j$cores`)
     run(`make install`)
   end
   println("DONE")
@@ -194,7 +197,7 @@ else
   cd(joinpath("$wdir", "flint2"))
   withenv("LD_LIBRARY_PATH"=>"$prefixpath/lib", "LDFLAGS"=>LDFLAGS) do
     run(`./configure --prefix=$prefixpath --disable-static --enable-shared --with-mpir=$prefixpath --with-mpfr=$prefixpath`)
-    run(`make -j4`)
+    run(`make -j$cores`)
     run(`make install`)
   end
 
@@ -225,7 +228,7 @@ else
   cd(joinpath("$wdir", "arb"))
   withenv("LD_LIBRARY_PATH"=>"$prefixpath/lib", "LDFLAGS"=>LDFLAGS) do
     run(`./configure --prefix=$prefixpath --disable-static --enable-shared --with-mpir=$prefixpath --with-mpfr=$prefixpath --with-flint=$prefixpath`)
-    run(`make -j4`)
+    run(`make -j$cores`)
     run(`make install`)
   end
   println("DONE")
@@ -255,7 +258,7 @@ else
   cd(joinpath("$wdir", "antic"))
   withenv("LD_LIBRARY_PATH"=>"$prefixpath/lib", "LDFLAGS"=>LDFLAGS) do
     run(`./configure --prefix=$prefixpath --disable-static --enable-shared --with-mpir=$prefixpath --with-mpfr=$prefixpath --with-flint=$prefixpath`)
-    run(`make -j4`)
+    run(`make -j$cores`)
     run(`make install`)
   end
   println("DONE")
